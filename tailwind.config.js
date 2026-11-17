@@ -1,0 +1,1 @@
+export default {content:['./index.html','./src/**/*.{ts,tsx}'],theme:{extend:{colors:{bg:'#080713',bg2:'#121021',card:'#171526',line:'#302943',gold:'#D4AF37',gold2:'#E8CE82',mute:'#A1A1B5'},fontFamily:{sans:['Inter','Poppins','sans-serif'],ur:['"Jameel Noori Nastaleeq"','"Noto Nastaliq Urdu"','serif'],ar:['Amiri','serif']}}}}
