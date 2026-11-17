@@ -4,3 +4,16 @@ body{@apply bg-bg text-white font-sans;background-image:radial-gradient(ellipse 
 .btn-gold{@apply btn bg-gold text-bg hover:bg-gold2}.btn-ghost{@apply btn border border-line hover:border-gold}
 .inp{@apply w-full rounded-lg border border-line bg-bg2 px-3 py-2 text-sm outline-none focus:border-gold}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.scene{position:absolute;inset:0;display:grid;place-items:center;perspective:1000px;pointer-events:none;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out}
+.star{width:340px;height:340px;position:relative;transform-style:preserve-3d;animation:spin 26s linear infinite}
+.layer{position:absolute;inset:0;transform-style:preserve-3d}
+.layer i{position:absolute;inset:14%;border:1.5px solid rgba(212,175,55,.75);box-shadow:0 0 22px rgba(212,175,55,.22),inset 0 0 22px rgba(212,175,55,.1)}
+.layer i:last-child{transform:rotate(45deg)}
+@keyframes spin{from{transform:rotateX(62deg) rotateZ(0)}to{transform:rotateX(62deg) rotateZ(360deg)}}
+.hero3d>*:not(.scene){position:relative;z-index:1}
+.card3d{transition:transform .18s ease-out,box-shadow .3s,border-color .2s;will-change:transform;transform-style:preserve-3d}
+.card3d:hover{box-shadow:0 22px 40px -14px rgba(212,175,55,.38),0 6px 12px rgba(0,0,0,.5)}
+.btn-gold{box-shadow:0 4px 0 #8f7420,0 12px 22px -10px rgba(212,175,55,.55)}
+.btn-gold:active{transform:translateY(3px);box-shadow:0 1px 0 #8f7420}
+@media (prefers-reduced-motion:reduce){.star{animation:none}.scene{transition:none}}
