@@ -1,0 +1,1 @@
+export default function Info({title,body}:{title:string;body?:string}){return <article className="mx-auto max-w-2xl"><h1 className="mb-4 text-3xl font-bold text-gold">{title}</h1><p className="whitespace-pre-line leading-8 text-mute">{body}</p></article>}
