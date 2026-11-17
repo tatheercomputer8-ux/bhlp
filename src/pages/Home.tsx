@@ -1,7 +1,11 @@
 import {useEffect,useState} from 'react'
 import {Link,useSearchParams} from 'react-router-dom'
 import {sb,SEL,Video,Settings} from '../lib/supabase'
-export function Card({v}:{v:Video}){return <Link to={`/videos/${v.youtube_video_id}`} className="group overflow-hidden rounded-xl border border-line bg-card transition hover:border-gold">
+const noMotion=()=>typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches
+const tilt=(e:React.MouseEvent<HTMLElement>)=>{if(noMotion())return;const el=e.currentTarget,r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform=`perspective(700px) rotateX(${-y*10}deg) rotateY(${x*12}deg) translateZ(12px)`}
+const untilt=(e:React.MouseEvent<HTMLElement>)=>{e.currentTarget.style.transform=''}
+const heroMove=(e:React.MouseEvent<HTMLElement>)=>{if(noMotion())return;const el=e.currentTarget,r=el.getBoundingClientRect();el.style.setProperty('--ry',`${((e.clientX-r.left)/r.width-.5)*16}deg`);el.style.setProperty('--rx',`${-((e.clientY-r.top)/r.height-.5)*12}deg`)}
+export function Card({v}:{v:Video}){return <Link to={`/videos/${v.youtube_video_id}`} className="card3d group overflow-hidden rounded-xl border border-line bg-card hover:border-gold" onMouseMove={tilt} onMouseLeave={untilt}>
  <div className="relative aspect-video overflow-hidden"><img loading="lazy" src={v.thumbnail_url||''} alt="" className="h-full w-full object-cover transition duration-300 group-hover:scale-105"/>
  <span className="absolute inset-0 grid place-items-center text-4xl text-gold opacity-80">▶</span>{v.duration&&<span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 text-xs">{v.duration}</span>}
  {v.is_featured&&<span className="absolute left-2 top-2 rounded bg-gold px-2 text-xs font-semibold text-bg">Featured</span>}</div>
@@ -17,7 +21,8 @@ export default function Home({s,listOnly}:{s:Settings|null;listOnly?:boolean}){
   qb.then(({data,error})=>{setErr(error?.message||'');let d=(data||[]) as Video[];if(cat)d=d.filter(v=>v.categories?.slug===cat);setVids(d);setLoading(false)})},[p,sort])
  const go=(e:React.FormEvent)=>{e.preventDefault();setP(q?{q}:{})}
  const sec=(t:string,l:Video[],to:string)=>l.length>0&&<section className="mt-12"><div className="mb-4 flex items-end justify-between"><h2 className="text-xl font-bold text-gold2">{t}</h2><Link to={to} className="text-sm text-mute hover:text-gold2">View All</Link></div><Grid list={l.slice(0,4)}/></section>
- return <>{!listOnly&&!p.get('q')&&<section className="rounded-2xl border border-line bg-bg2 px-6 py-16 text-center" style={{backgroundImage:'radial-gradient(circle at 50% 0,rgba(212,175,55,.12),transparent 60%)'}}>
+ return <>{!listOnly&&!p.get('q')&&<section onMouseMove={heroMove} className="hero3d relative overflow-hidden rounded-2xl border border-line bg-bg2 px-6 py-16 text-center" style={{backgroundImage:'radial-gradient(circle at 50% 0,rgba(212,175,55,.12),transparent 60%)'}}>
+  <div className="scene" aria-hidden="true"><div className="star">{[-90,-45,0,45,90].map(z=><div key={z} className="layer" style={{transform:`translateZ(${z}px)`,opacity:1-Math.abs(z)/160}}><i/><i/></div>)}</div></div>
   <h1 className="text-3xl font-bold tracking-wide text-gold sm:text-5xl">BABUL HAWAIJ LAYYAH PARTY</h1><p className="mt-3 font-ur text-3xl leading-[2]">باب الحوائج لیہ پارٹی</p>
   <p className="mx-auto mt-2 max-w-xl text-mute">{s?.hero_description}</p>
   <form onSubmit={go} className="mx-auto mt-6 flex max-w-xl gap-2"><input className="inp py-3" value={q} onChange={e=>setQ(e.target.value)} placeholder="Search Nohay, Reciters and Videos..." aria-label="Search"/><button className="btn-gold">Search</button></form>
